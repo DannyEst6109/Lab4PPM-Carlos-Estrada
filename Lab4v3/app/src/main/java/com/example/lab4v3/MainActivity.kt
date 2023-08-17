@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RecipeListScreen()
+                    RecetaListScreen()
                 }
             }
         }
@@ -79,7 +79,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 
-data class Recipe(val name: String, val imageUrl: String)
+data class Receta(val name: String, val imageUrl: String)
 
 /*@SuppressLint("MutableCollectionMutableState")*/
 /**@OptIn(ExperimentalMaterial3Api::class)*/
@@ -87,19 +87,19 @@ data class Recipe(val name: String, val imageUrl: String)
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalCoilApi
 @Composable
-fun RecipeListScreen() {
-    val itemList by remember { mutableStateOf(mutableStateListOf<Recipe>()) }
-    var recipeName by remember { mutableStateOf("") }
+fun RecetaListScreen() {
+    val itemList by remember { mutableStateOf(mutableStateListOf<Receta>()) }
+    var RecetaName by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Campos de entrada para el nombre de la receta y la URL de la imagen
+        // Campos de entrada para el nombre de la receta y la URL
         TextField(
-            value = recipeName,
-            onValueChange = { recipeName = it },
+            value = RecetaName,
+            onValueChange = { RecetaName = it },
             label = { Text("Nombre de Receta", fontSize = 30.sp)},
             textStyle = TextStyle(fontSize = 50.sp), // Cambia el tamaño de texto tecleado
             modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -116,9 +116,9 @@ fun RecipeListScreen() {
         // Agregar button
         Button(
             onClick = {
-                if (recipeName.isNotBlank() && imageUrl.isNotBlank()) {
-                    itemList.add(Recipe(recipeName, imageUrl))
-                    recipeName = ""
+                if (RecetaName.isNotBlank() && imageUrl.isNotBlank()) {
+                    itemList.add(Receta(RecetaName, imageUrl))
+                    RecetaName = ""
                     imageUrl = ""
                 }
             },
@@ -136,8 +136,8 @@ fun RecipeListScreen() {
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             contentPadding = PaddingValues(8.dp)
         ) {
-            items(itemList) { recipe ->
-                RecipeItem(recipe)
+            items(itemList) { Receta ->
+                RecetaItem(Receta)
             }
         }
     }
@@ -145,7 +145,7 @@ fun RecipeListScreen() {
 
 @ExperimentalCoilApi
 @Composable
-fun RecipeItem(recipe: Recipe) {
+fun RecetaItem(Receta: Receta) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -154,7 +154,7 @@ fun RecipeItem(recipe: Recipe) {
     ) {
         Image(
             painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current).data(data = recipe.imageUrl).apply {
+                ImageRequest.Builder(LocalContext.current).data(data = Receta.imageUrl).apply {
                     crossfade(true)
                     transformations(CircleCropTransformation())
                 }.build()
@@ -164,7 +164,7 @@ fun RecipeItem(recipe: Recipe) {
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            text = recipe.name,
+            text = Receta.name,
             /**style = MaterialTheme.typography.headlineLarge,*/
             style = MaterialTheme.typography.titleMedium.copy(fontSize = 80.sp),
             fontWeight = FontWeight.Bold,
@@ -181,6 +181,6 @@ fun RecipeItem(recipe: Recipe) {
 @Composable
 fun GreetingPreview() {
     Lab4v3Theme {
-        RecipeListScreen()
+        RecetaListScreen()
     }
 }
