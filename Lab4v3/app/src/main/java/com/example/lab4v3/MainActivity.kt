@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.lab4v3.ui.theme.Lab4v3Theme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,12 +27,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.google.firebase.inappmessaging.model.Button
+
 /*
 import coil.compose.rememberImagePainter
 import androidx.compose.foundation.background
@@ -47,6 +52,7 @@ import androidx.compose.material3.TextField
 */
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -72,8 +78,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+
+data class Recipe(val name: String, val imageUrl: String)
+
 /*@SuppressLint("MutableCollectionMutableState")*/
 /**@OptIn(ExperimentalMaterial3Api::class)*/
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalCoilApi
 @Composable
@@ -86,21 +96,24 @@ fun RecipeListScreen() {
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Input fields for recipe name and image URL
+        // Campos de entrada para el nombre de la receta y la URL de la imagen
         TextField(
             value = recipeName,
             onValueChange = { recipeName = it },
-            label = { Text("Nombre de Receta") },
+            label = { Text("Nombre de Receta", fontSize = 30.sp)},
+            textStyle = TextStyle(fontSize = 50.sp), // Cambia el tamaño de texto tecleado
             modifier = Modifier.fillMaxWidth().padding(8.dp)
-        )
+            )
         TextField(
             value = imageUrl,
             onValueChange = { imageUrl = it },
-            label = { Text("Image URL") },
+            label = { Text("Image URL", fontSize = 30.sp) },
+            textStyle = TextStyle(fontSize = 50.sp), // Cambia el tamaño de texto tecleado
             modifier = Modifier.fillMaxWidth().padding(8.dp)
+
         )
 
-        // Add button
+        // Agregar button
         Button(
             onClick = {
                 if (recipeName.isNotBlank() && imageUrl.isNotBlank()) {
@@ -111,10 +124,14 @@ fun RecipeListScreen() {
             },
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         ) {
-            Text(text = "Agregar")
+            Text(
+                text = "Agregar",
+                style = MaterialTheme.typography.titleMedium.copy(fontSize = 50.sp)
+            )
+
         }
 
-        // Display list of recipes
+        // Mostrar lista de recetas
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             contentPadding = PaddingValues(8.dp)
@@ -143,19 +160,21 @@ fun RecipeItem(recipe: Recipe) {
                 }.build()
             ),
             contentDescription = null,
-            modifier = Modifier.size(50.dp).clip(CircleShape)
+            modifier = Modifier.size(250.dp).clip(CircleShape).border(10.dp, MaterialTheme.colorScheme.primary, CircleShape) // Contorno
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = recipe.name,
-            style = MaterialTheme.typography.headlineLarge,
+            /**style = MaterialTheme.typography.headlineLarge,*/
+            style = MaterialTheme.typography.titleMedium.copy(fontSize = 80.sp),
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
+
         )
     }
 }
 
-data class Recipe(val name: String, val imageUrl: String)
+
 
 @OptIn(ExperimentalCoilApi::class)
 @Preview(showBackground = true)
